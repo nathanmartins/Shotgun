@@ -1,0 +1,14 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Shotgun</title>
+      {% else %}
+      <title>Shotgun</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Shotgun: <a href="/">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
