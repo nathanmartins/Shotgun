@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  postgres:
+    image: postgres:9.6-alpine
+    container_name: shotgun-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=shotgun
+      - POSTGRES_USER=shotgun
+      - POSTGRES_PASSWORD=shotgun
+
