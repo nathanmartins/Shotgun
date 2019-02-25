@@ -52,7 +52,7 @@ class Runner:
                 self.pwd: {'bind': self.working_dir, 'mode': 'rw'},
             },
             working_dir=self.working_dir,
-            auto_remove=True,
+            auto_remove=False,
             detach=True,
         )
 
@@ -77,3 +77,5 @@ class Runner:
 
         self._parsed_run_results = True
         self.run_results = run_results
+        self.container.remove()
+        self._compiled = False

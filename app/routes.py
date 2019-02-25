@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime
 
-from flask import render_template, jsonify, request
+from flask import render_template, request, redirect
 from werkzeug.utils import secure_filename
 
 from app import app, db
@@ -29,14 +29,16 @@ def index():
 
         res = Result(
             filename=filename,
-            results=json.dumps(r.run_results),
+            real=r.run_results['real'],
+            user=r.run_results['user'],
+            sys=r.run_results['sys'],
             datetime=datetime.now(),
         )
 
         db.session.add(res)
         db.session.commit()
 
-        return jsonify(r.run_results)
+        return redirect('/results')
 
     context = {
         'title': 'Home',
@@ -46,6 +48,8 @@ def index():
     return render_template('index.html', **context)
 
 
-@app.route('/success', )
-def success():
-    return 'success'
+@app.route('/results', )
+def results():
+    res = Result.query.all()
+
+    return render_template('list.html', results=res)
