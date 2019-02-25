@@ -1,4 +1,3 @@
-import json
 import os
 from datetime import datetime
 
@@ -32,6 +31,7 @@ def index():
             real=r.run_results['real'],
             user=r.run_results['user'],
             sys=r.run_results['sys'],
+            output=r.output,
             datetime=datetime.now(),
         )
 

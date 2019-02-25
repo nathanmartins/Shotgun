@@ -1,6 +1,3 @@
-import json
-import os
-
 import docker
 
 
@@ -12,10 +9,10 @@ class Runner:
         self.filename = filename
         self.program_name = filename.split('.')[0]
 
-        self.pwd = os.path.dirname(os.path.realpath(__file__))
-        self.working_dir = '/usr/src/myapp'
+        self.working_dir = '/tmp/shotgun/'
         self.container = None
         self.run_results = None
+        self.output = None
 
         self._compiled = False
         self._parsed_run_results = False
@@ -28,8 +25,6 @@ class Runner:
         if self._parsed_run_results is False:
             self._parse_run_results()
 
-        print(json.dumps(self.run_results))
-
     def _compile(self):
 
         if self._compiled is True:
@@ -37,11 +32,11 @@ class Runner:
 
         print('Compiling...')
 
-        time_command = 'time ./{} > /dev/null 2>&1'.format(
-            self.program_name
+        time_command = 'time {} > {}.log'.format(
+            self.program_name, self.program_name
         )
 
-        command = '/bin/bash -c "gcc -o {} {} ; {}; rm {}"'.format(
+        command = '/bin/bash -c "gcc -o {} {} && {} && rm {}"'.format(
             self.program_name, self.filename, time_command, self.program_name
         )
 
@@ -49,7 +44,7 @@ class Runner:
             image='gcc:4.9',
             command=command,
             volumes={
-                self.pwd: {'bind': self.working_dir, 'mode': 'rw'},
+                self.working_dir: {'bind': self.working_dir, 'mode': 'rw'},
             },
             working_dir=self.working_dir,
             auto_remove=False,
@@ -68,6 +63,8 @@ class Runner:
 
         for line in self.container.logs(stream=True):
             l = line.strip().decode("utf-8")
+
+            print(l)
             if l.startswith('user'):
                 run_results['user'] = l.split('	')[1]
             elif l.startswith('real'):
@@ -77,5 +74,10 @@ class Runner:
 
         self._parsed_run_results = True
         self.run_results = run_results
+
+        with open('{}.log'.format(self.program_name), 'r') as myfile:
+            v = myfile.read().replace('\n', '')
+            self.output = v
+
         self.container.remove()
         self._compiled = False
