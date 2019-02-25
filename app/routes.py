@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash
 from werkzeug.utils import secure_filename
 
 from app import app, db
@@ -38,6 +38,8 @@ def index():
         db.session.add(res)
         db.session.commit()
 
+        flash('Successfully created result!')
+
         return redirect('/results')
 
     context = {
@@ -53,3 +55,13 @@ def results():
     res = Result.query.all()
 
     return render_template('list.html', results=res)
+
+
+@app.route('/delete/<int:result_id>', )
+def delete(result_id):
+    res = Result.query.get_or_404(result_id)
+    db.session.delete(res)
+    db.session.commit()
+    flash('Successfully deleted result ID #{}'.format(result_id))
+
+    return redirect('/results')

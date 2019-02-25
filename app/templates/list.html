@@ -12,6 +12,7 @@
             <th scope="col">User</th>
             <th scope="col">Sys</th>
             <th scope="col">Time</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
                 <td>{{ result.user }}</td>
                 <td>{{ result.sys }}</td>
                 <td>{{ result.datetime.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td><a href="/delete/{{ result.id }}"><i class="fas fa-minus-circle" style="color: red"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>
