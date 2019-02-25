@@ -1,11 +1,14 @@
+import json
 import os
+from datetime import datetime
 
 from flask import render_template, jsonify, request
 from werkzeug.utils import secure_filename
 
-from app import app
+from app import app, db
 from app.forms import FileForm
 from runner import Runner
+from .models import Result
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,6 +26,15 @@ def index():
 
         r = Runner(full_filename)
         r.run()
+
+        res = Result(
+            filename=filename,
+            results=json.dumps(r.run_results),
+            datetime=datetime.now(),
+        )
+
+        db.session.add(res)
+        db.session.commit()
 
         return jsonify(r.run_results)
 

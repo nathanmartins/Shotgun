@@ -52,6 +52,7 @@ class Runner:
                 self.pwd: {'bind': self.working_dir, 'mode': 'rw'},
             },
             working_dir=self.working_dir,
+            auto_remove=True,
             detach=True,
         )
 
