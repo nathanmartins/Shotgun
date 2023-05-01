@@ -4,7 +4,7 @@ chardet==3.0.4
 Click==7.0
 docker==4.0.1
 docker-pycreds==0.4.0
-Flask==1.0.3
+Flask==2.3.2
 Flask-Migrate==2.5.2
 Flask-SQLAlchemy==2.4.0
 Flask-WTF==0.14.2
